@@ -17,8 +17,10 @@
  */
 package yi.sort;
 import java.util.Arrays;
+
+
 public class MergeSort {
-    public int[] sort(int[] sourcrArray) {
+    public static int[] sort(int[] sourcrArray) {
         int[] arr = Arrays.copyOf(sourcrArray, sourcrArray.length);
         if (arr.length <2){
             return arr;
@@ -30,10 +32,10 @@ public class MergeSort {
         return merge(sort(left),sort(right));
     }
 
-    protected int[] merge(int[] left, int[] right){
+    protected static int[] merge(int[] left, int[] right){
         int[] result = new int[left.length + right.length];
         int i = 0;
-        while(left.length>0 && right.length>0) {
+        while(left.length>0 && right.length>0) {// 把左右【0】进行比较知道，左右其中一个长度为0
             if (left[0]<=right[0]){
                 result[i++] = left[0];
                 left = Arrays.copyOfRange(left, 1, left.length);
@@ -46,15 +48,61 @@ public class MergeSort {
             result[i++] = left[0];
             left = Arrays.copyOfRange(left, 1, left.length);
         }
-        while(left.length>0){
-            result[i++] = left[0];
-            left = Arrays.copyOfRange(left, 1, left.length);
+        while(right.length>0){
+            result[i++] = right[0];
+            right = Arrays.copyOfRange(right, 1, right.length);
         }
         return result;
     }
 
     public static void main(String[] args) {
-        System.out.println((111>>1)+1);
-        System.out.println(Math.floor(7/2));
+        // System.out.println((111>>1)+1);
+        // System.out.println(Math.floor(7/2));
+        // System.out.println(Math.floor(3/2));
+        // int[] a={1,2,3};
+        // int[] c = Arrays.copyOfRange(a, 0, 1); //[from,to)状态
+        // for(int entity:c)System.out.println(entity);
+        int[] arr = {12,4,5,7,2,23,57,8,0};
+        arr = mergeSort(arr);
+        for (int entity:arr) System.out.println(entity);
+    }
+
+    //要重写归并排序，主要是merge的方法，和递归调用
+    //sort 算法主要是递归，递归的跳出就是，数组的长度不足2了
+    public static int[] mergeSort(int[] sourceArray){
+        int[] arr = Arrays.copyOf(sourceArray, sourceArray.length);
+        if (arr.length<2) return arr;
+        int middle = (int)Math.floor(arr.length/2);
+        int[] left = Arrays.copyOfRange(arr, 0, middle);
+        int[] right = Arrays.copyOfRange(arr, middle, arr.length);//这里是左闭右开的方式
+        return mergeF(mergeSort(left),mergeSort(right));
+    }
+
+    private static int[] mergeF(int[] left, int[] right){
+        int[] result = new int[left.length + right.length];
+        int i=0;
+        while(left.length>0 && right.length>0) {
+            if(left[0]<=right[0]){
+                result[i] = left[0];
+                left = Arrays.copyOfRange(left, 1, left.length);
+                i++;
+            }else{
+                result[i] = right[0];
+                right = Arrays.copyOfRange(right, 1, right.length);
+                i++;
+            }
+        }
+        while(left.length>0) {
+            // for(int entity:left) {
+            //     result[i++] = entity;
+            // } 这里不能用for循环了
+            result[i++] = left[0]; // bug fix 必须i要递增
+            left = Arrays.copyOfRange(left, 1, left.length);
+        }
+        while(right.length>0) {
+            result[i++] = right[0];
+            right = Arrays.copyOfRange(right, 1, right.length);
+        }
+        return result;
     }
 }

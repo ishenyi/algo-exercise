@@ -1,6 +1,6 @@
 package yi.sort;
 
-
+import java.util.Arrays;
 
 public class ShellSort{
     public static int[] sort(int[] array) {
@@ -48,7 +48,7 @@ public class ShellSort{
                 //     j = j-step;
                 // }
                 // arr[j+step] = tmp;
-                for (;j>=0;j -= step){
+                for (;j>=0;j -= step){// 
                     if( arr[j]>tmp){
                         arr[j+step]=arr[j];
                         arr[j]=tmp;
@@ -62,7 +62,30 @@ public class ShellSort{
     }
     public static void main(String[] args) {
         int[] arr = {2,4,5,3,1};
-        arr = sort2(arr);
+        arr = shellSortStandard(arr);
         for (int entity:arr) System.out.println(entity);
+    }
+
+    //shell算法
+    public static int[] shellSortStandard(int[] sourceArray){
+        int[] arr = Arrays.copyOf(sourceArray, sourceArray.length);
+        int step = (int)Math.floor(arr.length/2);
+        while(step>=1){
+
+            for(int i = step; i<arr.length; i++){
+                int insert = arr[i];
+                int j=i-step;
+                while(j>=0 && arr[j]>insert){//这里不能写arr[i],因为arr[i]会变化
+                    arr[j+step] = arr[j];
+                    j -= step;
+                }
+                arr[j+step] = insert;
+                
+            }
+
+            step = (int)Math.floor(step/2);
+        }
+        return arr;
+
     }
 }
